@@ -1,23 +1,32 @@
-import {useContext,useEffect} from 'react'
+import {useContext,useEffect, useState} from 'react'
 import { authContext } from '../context/AuthContext'
 import axios from 'axios'
 
-function Homepage() {
-  // useContext(): allows me to consume the context
 
-  // sending request to protected route that needs a token
+function LandingPage() {
+   const {user} = useContext(authContext);
+   const [message, setMessage] = useState('');
+   const [error, setError] = useState('')
   async function callProtectedRoute(){
-    const token = localStorage.getItem("token")
-    const response= await axios.get(`${import.meta.env.VITE_BACKEND_URL}/test-jwt/checkout`,{headers:{Authorization:`Bearer ${token}`}})
-    console.log(response.data)
+    try {
+      const token = localStorage.getItem("token")
+      const response= await axios.get(`${import.meta.env.VITE_BACKEND_URL}/test-jwt/checkout`,{headers:{Authorization:`Bearer ${token}`}})
+      console.log(response.data);
+      setMessage(response.data.message || "Welcome to TaskHub")
+    } catch (error) {
+      setError("Failed to fetch data. Please log in")
+    }
   }
 
-  callProtectedRoute()
+  useEffect(() => {
+    callProtectedRoute();
+  }, []);
+
   return (
     <div>
-      Homepage
+      landing page
     </div>
   )
 }
 
-export default Homepage
+export default LandingPage

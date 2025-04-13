@@ -1,22 +1,22 @@
 import './App.css'
 import {Routes ,Route} from 'react-router'
 import Login from './pages/Login'
-import Homepage from './pages/Homepage'
+import LandingPage from './pages/Landing'
 import Signup from './pages/Signup'
 import Navbar from './components/Navbar'
 import ValidateIsLoggedIn from './validators/ValidateIsLoggedIn'
 import ValidateIsLoggedOut from './validators/ValidateIsLoggedOut'
+import { authContext } from './context/AuthContext'
+import { useContext } from 'react'
 
 function App() {
-
+  const {user} = useContext(authContext);
 
   return (
     <>
-      <Navbar/>
-      <Routes>
-        <Route path="/signup" element={<Signup/>}/>
-        <Route path="/login" element={<Login/>}/>
-      </Routes>
+      <div>
+        {user ? <LandingPage /> : <Login />}
+      </div>
     </>
   )
 }
