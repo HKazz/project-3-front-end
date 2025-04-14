@@ -33,6 +33,7 @@ function App() {
       <Routes>
         {user ? (
           <>
+        
             <Route path="/" element={<LandingPage />} />
             <Route path="/projects" element={<ProjectList />} />
             <Route path="/project/create" element={<CreateProject/>}/>

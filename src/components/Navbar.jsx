@@ -11,6 +11,13 @@ function Navbar() {
     <div>
       <ul>
         <Link to="/"><li>Homepage</li></Link>
+        <Link to="/projects"><li>Projects</li></Link>
+        <Link to="/project/create"><li>Create Project</li></Link>
+        <Link to="/project/:projectId/edit"><li>Edit Project</li></Link>
+        <Link to="/project/:projectId/delete"><li>Delete Project</li></Link>
+        <Link to="/project/:projectId/tasks/create"><li>Create Task</li></Link>
+        <Link to="/project/:projectId/tasks/:taskId/edit"><li>Edit Task</li></Link>
+        <Link to="/project/:projectId/tasks/:taskId/delete"><li>Delete Task</li></Link>
         {user && (
 
           <>

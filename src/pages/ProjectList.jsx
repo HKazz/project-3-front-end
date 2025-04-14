@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import axios from 'axios';
 
 function ProjectList() {
@@ -9,18 +9,19 @@ function ProjectList() {
     async function getProjects() {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/projects`,{
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/project`,{
           headers: {Authorization: `Bearer ${token}`},
         })
+        console.log(response.data)
         setProjects(response.data)
       } catch (error) {
         setError("Failed to fetch projects. Please try again")
         console.error(error)
       }
     }
-
     getProjects();
-  })
+
+  },[])
   return (
     <div>
       <h1>Your Projects</h1>
