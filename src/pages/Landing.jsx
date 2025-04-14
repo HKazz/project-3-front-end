@@ -1,6 +1,7 @@
 import {useContext,useEffect, useState} from 'react'
 import { authContext } from '../context/AuthContext'
 import axios from 'axios'
+import { Link } from 'react-router';
 
 
 function LandingPage() {
@@ -24,7 +25,10 @@ function LandingPage() {
 
   return (
     <div>
-      landing page
+      Welcome to the TaskHub landing page 
+      <ul>
+      <Link to='/projects'>View your Projects</Link>
+      </ul>
     </div>
   )
 }
