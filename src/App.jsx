@@ -17,10 +17,8 @@ import { useContext, useEffect } from 'react'
 import ProjectList from './pages/ProjectList'
 import { useNavigate } from 'react-router'
 
-
 function App() {
   const { user } = useContext(authContext);
-
   const navigate = useNavigate();
 
   // useEffect(() => {
@@ -32,7 +30,6 @@ function App() {
   return (
     <>
       <Navbar/>
-
       <Routes>
         {user ? (
           <>
@@ -53,34 +50,7 @@ function App() {
         )}
       </Routes>
     </>
-    
-  )
-
-      <div>
-        <Routes>
-          {
-            user ?(
-              <>
-                <Route path="/" element={<LandingPage />} />
-                <Route path="/projects" element={<ProjectList />} />
-
-
-              </>
-            )
-            :
-            (
-              <>
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              </>
-            )
-          }
-          
-        </Routes>
-      </div>
-    </>
   );
-
 }
 
 export default App
