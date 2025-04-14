@@ -1,6 +1,7 @@
 import {useState} from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router'
+import { Link } from 'react-router'
 
 function Signup() {
 
@@ -28,7 +29,7 @@ function Signup() {
     }
   return (
     <div>
-      
+      <h1>SignUp</h1>
       <form onSubmit={handleSubmit}>
         <label htmlFor="username">Username:</label>
         <input
@@ -50,6 +51,8 @@ function Signup() {
 
           <button>Submit</button>
       </form>
+
+      <p>You already have a user? then <Link to='/login'>Login</Link> </p>
     </div>
   )
 }
