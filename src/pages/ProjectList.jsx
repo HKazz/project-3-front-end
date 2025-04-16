@@ -1,10 +1,8 @@
-import React, { use, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
 function ProjectList() {
   const [projects, setProjects]= useState([]);
   const [error, setError]= useState('');
-
   useEffect(()=>{
     async function getProjects() {
       try {
@@ -20,7 +18,6 @@ function ProjectList() {
       }
     }
     getProjects();
-
   },[])
   return (
     <div>
@@ -28,13 +25,12 @@ function ProjectList() {
      <ul>
       {projects.map((project)=>(
         <li key={project._id}>
-          <h3>{project.name}</h3>
-          <p>{project.description}</p>
+          <a><h3>{project.projectName}</h3></a>
+          <p>{project.projectDescription}</p>
         </li>
       ))}
      </ul>
     </div>
   )
 }
-
 export default ProjectList

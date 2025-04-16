@@ -2,8 +2,6 @@ import {useContext,useEffect, useState} from 'react'
 import { authContext } from '../context/AuthContext'
 import axios from 'axios'
 import { Link } from 'react-router';
-
-
 function LandingPage() {
    const {user} = useContext(authContext);
    const [message, setMessage] = useState('');
@@ -18,19 +16,16 @@ function LandingPage() {
       setError("Failed to fetch data. Please log in")
     }
   }
-
   useEffect(() => {
     callProtectedRoute();
   }, []);
-
   return (
     <div>
       Welcome to the TaskHub landing page 
       <ul>
-      <Link to='/projects'>View your Projects</Link>
+      <Link to='/project'>View your Projects</Link>
       </ul>
     </div>
   )
 }
-
 export default LandingPage
