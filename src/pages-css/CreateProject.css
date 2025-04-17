@@ -1,0 +1,292 @@
+.create-project-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: var(--background-alt);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.create-project-container h2 {
+  color: white;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.create-project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: clamp(1rem, 3vw, 2rem);
+  padding-bottom: clamp(0.5rem, 2vw, 1rem);
+  border-bottom: 3px solid var(--border-color);
+}
+
+.create-project-header h1 {
+  color: white;
+  font-size: clamp(1.25rem, 4vw, 2rem);
+  font-weight: var(--font-weight-bold);
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.25rem, 1vw, 0.5rem);
+  padding: clamp(0.5rem, 1.5vw, 1rem) clamp(1rem, 2vw, 1.5rem);
+  background-color: var(--light-bg-alt);
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+  border-radius: clamp(0.375rem, 1.5vw, 0.5rem);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  transition: all var(--transition-normal);
+}
+
+.back-button:hover {
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  border-color: var(--primary-color);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.create-project-form {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 3vw, 2rem);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.25rem, 1vw, 0.5rem);
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: white;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 1rem;
+  background-color: var(--background);
+  color: white;
+}
+
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+  background-color: var(--background-alt);
+  border: 2px solid var(--border-color);
+  padding: 1rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  background-color: var(--background);
+}
+
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23475569'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right clamp(0.5rem, 2vw, 1rem) center;
+  background-size: 1.5em;
+  padding-right: clamp(1rem, 3vw, 2rem);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+  gap: clamp(1rem, 3vw, 2rem);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: clamp(0.5rem, 2vw, 1rem);
+  margin-top: clamp(1rem, 3vw, 2rem);
+  padding-top: clamp(1rem, 3vw, 2rem);
+  border-top: 2px solid var(--border-color);
+}
+
+.submit-button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submit-button:hover {
+  background-color: var(--primary-color-dark);
+}
+
+.submit-button:disabled {
+  background-color: var(--disabled-color);
+  cursor: not-allowed;
+}
+
+.cancel-button {
+  padding: clamp(0.5rem, 2vw, 1rem) clamp(1rem, 3vw, 2rem);
+  background-color: var(--light-bg-alt);
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+  border-radius: clamp(0.375rem, 1.5vw, 0.5rem);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.cancel-button:hover {
+  background-color: var(--border-color);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.error-message {
+  color: #ff4444;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.success-message {
+  color: #00C851;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.date-time-inputs {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.date-time-inputs input[type="date"],
+.date-time-inputs input[type="time"] {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.date-time-inputs input[type="time"] {
+  min-width: 120px;
+}
+
+@media (max-width: 768px) {
+  .create-project-container {
+    margin: clamp(0.75rem, 2vw, 1rem);
+    padding: clamp(0.75rem, 2vw, 1rem);
+  }
+
+  .create-project-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: clamp(0.5rem, 2vw, 1rem);
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .submit-button,
+  .cancel-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .create-project-container {
+    background-color: var(--background-alt);
+  }
+
+  .create-project-container h2 {
+    color: white;
+  }
+
+  .form-group label {
+    color: white;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    background-color: var(--background);
+    border-color: var(--border-color-dark);
+    color: white;
+  }
+
+  .create-project-header {
+    border-bottom-color: var(--border-color-dark);
+  }
+
+  .create-project-header h1 {
+    color: white;
+  }
+
+  .back-button {
+    background-color: var(--dark-bg-alt);
+    color: var(--text-light);
+    border-color: var(--border-color-dark);
+  }
+
+  .back-button:hover {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    border-color: var(--primary-color);
+  }
+
+  .form-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23f8fafc'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  }
+
+  .form-actions {
+    border-top-color: var(--border-color-dark);
+  }
+
+  .cancel-button {
+    background-color: var(--dark-bg-alt);
+    color: var(--text-light);
+    border-color: var(--border-color-dark);
+  }
+
+  .cancel-button:hover {
+    background-color: var(--border-color-dark);
+  }
+
+  .form-group textarea {
+    background-color: var(--background-alt);
+    border-color: var(--border-color-dark);
+  }
+
+  .form-group textarea:focus {
+    background-color: var(--background);
+    border-color: var(--primary-color);
+  }
+} 

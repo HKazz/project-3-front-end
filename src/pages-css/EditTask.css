@@ -1,0 +1,204 @@
+.edit-task-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.edit-task-container h2 {
+  color: #333;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.edit-task-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #2196f3;
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+}
+
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-group input:disabled,
+.form-group textarea:disabled,
+.form-group select:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.date-time-inputs {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.date-time-inputs input[type="date"],
+.date-time-inputs input[type="time"] {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.date-time-inputs input[type="time"] {
+  min-width: 120px;
+}
+
+.date-time-inputs input[type="date"]:focus,
+.date-time-inputs input[type="time"]:focus {
+  outline: none;
+  border-color: #2196f3;
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+}
+
+.error-message {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+.success-message {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+.submit-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.submit-button:hover {
+  background-color: #1976d2;
+  transform: translateY(-1px);
+}
+
+.submit-button:active {
+  transform: translateY(0);
+}
+
+.submit-button:disabled {
+  background-color: #bdbdbd;
+  cursor: not-allowed;
+  transform: none;
+}
+
+@media (max-width: 768px) {
+  .edit-task-container {
+    margin: 1rem;
+    padding: 1rem;
+  }
+
+  .date-time-inputs {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .date-time-inputs input[type="date"],
+  .date-time-inputs input[type="time"] {
+    width: 100%;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .edit-task-container {
+    background-color: #1a1a1a;
+    color: #fff;
+  }
+
+  .edit-task-container h2 {
+    color: #fff;
+  }
+
+  .form-group label {
+    color: #ccc;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    background-color: #2d2d2d;
+    border-color: #404040;
+    color: #fff;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: #2196f3;
+  }
+
+  .form-group input:disabled,
+  .form-group textarea:disabled,
+  .form-group select:disabled {
+    background-color: #333;
+    color: #888;
+  }
+
+  .error-message {
+    background-color: #421c1c;
+    color: #ff8a8a;
+  }
+
+  .success-message {
+    background-color: #1c421c;
+    color: #8aff8a;
+  }
+} 
