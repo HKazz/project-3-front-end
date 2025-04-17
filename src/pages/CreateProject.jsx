@@ -10,7 +10,9 @@ function CreateProject() {
     projectName: "",
     projectDescription: "",
     startDate: "",
+    startTime: "00:00",
     endDate: "",
+    endTime: "23:59",
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -39,14 +41,23 @@ function CreateProject() {
     }
 
     try {
-      // Log the request details for debugging
-      console.log("Backend URL:", import.meta.env.VITE_BACKEND_URL);
-      console.log("Request data:", formData);
-      console.log("Token:", token);
+      // Combine date and time
+      const startDateTime = `${formData.startDate}T${formData.startTime}`;
+      const endDateTime = `${formData.endDate}T${formData.endTime}`;
+
+      const submitData = {
+        ...formData,
+        startDate: startDateTime,
+        endDate: endDateTime
+      };
+
+      // Remove the separate time fields before sending
+      delete submitData.startTime;
+      delete submitData.endTime;
 
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/project`,
-        formData,
+        submitData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -63,7 +74,9 @@ function CreateProject() {
         projectName: "",
         projectDescription: "",
         startDate: "",
+        startTime: "00:00",
         endDate: "",
+        endTime: "23:59",
       });
 
       // Redirect after a short delay
@@ -135,27 +148,47 @@ function CreateProject() {
         </div>
 
         <div className="form-group">
-          <label htmlFor="startDate">Start Date:</label>
-          <input
-            id="startDate"
-            name="startDate"
-            type="date"
-            value={formData.startDate}
-            onChange={handleChange}
-            required
-          />
+          <label htmlFor="startDate">Start Date and Time:</label>
+          <div className="date-time-inputs">
+            <input
+              id="startDate"
+              name="startDate"
+              type="date"
+              value={formData.startDate}
+              onChange={handleChange}
+              required
+            />
+            <input
+              id="startTime"
+              name="startTime"
+              type="time"
+              value={formData.startTime}
+              onChange={handleChange}
+              required
+            />
+          </div>
         </div>
 
         <div className="form-group">
-          <label htmlFor="endDate">End Date:</label>
-          <input
-            id="endDate"
-            name="endDate"
-            type="date"
-            value={formData.endDate}
-            onChange={handleChange}
-            required
-          />
+          <label htmlFor="endDate">End Date and Time:</label>
+          <div className="date-time-inputs">
+            <input
+              id="endDate"
+              name="endDate"
+              type="date"
+              value={formData.endDate}
+              onChange={handleChange}
+              required
+            />
+            <input
+              id="endTime"
+              name="endTime"
+              type="time"
+              value={formData.endTime}
+              onChange={handleChange}
+              required
+            />
+          </div>
         </div>
 
         <button 

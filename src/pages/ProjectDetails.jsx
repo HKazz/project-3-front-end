@@ -118,17 +118,18 @@ function ProjectDetails() {
         return 'Invalid date';
       }
       
-      // Format the date with more detail for Last Updated
-      const options = { 
-        year: 'numeric', 
-        month: 'short', 
-        day: 'numeric',
-        hour: '2-digit', 
-        minute: '2-digit',
-        second: '2-digit'
-      };
+      // Format the date as "18 April 2:30 PM"
+      const day = date.getDate();
+      const month = date.toLocaleString('en-US', { month: 'long' });
       
-      return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], options);
+      // Convert to 12-hour format with AM/PM
+      let hours = date.getHours();
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12; // the hour '0' should be '12'
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      
+      return `${day} ${month} ${hours}:${minutes} ${ampm}`;
     } catch (error) {
       console.error('Error formatting date:', error);
       return 'Invalid date';
@@ -210,6 +211,11 @@ function ProjectDetails() {
   };
 
   const handleDeleteTask = async (taskId) => {
+    setTaskToDelete(taskId);
+    setShowTaskDeleteConfirm(true);
+  };
+
+  const confirmDeleteTask = async () => {
     try {
       setDeleteLoading(true);
       const token = localStorage.getItem('token');
@@ -221,16 +227,17 @@ function ProjectDetails() {
       }
 
       const API_URL = import.meta.env.VITE_BACKEND_URL;
-      console.log("Attempting to delete task with ID:", taskId);
+      console.log("Attempting to delete task with ID:", taskToDelete);
 
-      // Use the correct endpoint for task deletion based on how routes are registered in the backend
-      await axios.delete(`${API_URL}/tasks/${projectId}/tasks/${taskId}`, {
+      await axios.delete(`${API_URL}/tasks/${projectId}/tasks/${taskToDelete}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       console.log("Task deleted successfully");
 
       // Refresh project details to update the task list
       await fetchProjectDetails();
+      setShowTaskDeleteConfirm(false);
+      setTaskToDelete(null);
     } catch (error) {
       console.error('Error deleting task:', error);
       if (error.response) {
@@ -298,6 +305,9 @@ function ProjectDetails() {
           <Link to={`/project/${projectId}/tasks/create`} className="create-task-button">
             Create New Task
           </Link>
+          <Link to={`/project/${projectId}/team`} className="team-work-button">
+            Team Work
+          </Link>
           <button 
             onClick={() => setShowDeleteConfirm(true)} 
             className="delete-button"
@@ -323,6 +333,34 @@ function ProjectDetails() {
               </button>
               <button 
                 onClick={() => setShowDeleteConfirm(false)} 
+                className="cancel-delete-button"
+                disabled={deleteLoading}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showTaskDeleteConfirm && (
+        <div className="delete-confirmation-modal">
+          <div className="delete-confirmation-content">
+            <h2>Confirm Delete Task</h2>
+            <p>Are you sure you want to delete this task? This action cannot be undone.</p>
+            <div className="delete-confirmation-buttons">
+              <button 
+                onClick={confirmDeleteTask} 
+                className="confirm-delete-button"
+                disabled={deleteLoading}
+              >
+                {deleteLoading ? 'Deleting...' : 'Yes, Delete'}
+              </button>
+              <button 
+                onClick={() => {
+                  setShowTaskDeleteConfirm(false);
+                  setTaskToDelete(null);
+                }} 
                 className="cancel-delete-button"
                 disabled={deleteLoading}
               >
@@ -363,22 +401,9 @@ function ProjectDetails() {
               <div key={task._id} className="task-card">
                 <div className="task-header">
                   <h3>{task.taskName}</h3>
-                  <div className="task-actions">
-                    <span className={`status-badge ${getStatusColor(task.status)}`}>
-                      {task.status}
-                    </span>
-                    <button
-                      className="task-delete-button"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleDeleteTask(task._id);
-                      }}
-                      disabled={deleteLoading}
-                    >
-                      Delete
-                    </button>
-                  </div>
+                  <span className={`status-badge ${getStatusColor(task.status)}`}>
+                    {task.status}
+                  </span>
                 </div>
                 <p className="task-description">{task.taskDescription}</p>
                 <div className="task-info">
@@ -395,6 +420,23 @@ function ProjectDetails() {
                     <span className={`priority-badge ${task.priority}`}>
                       {task.priority}
                     </span>
+                  </div>
+                </div>
+                <div className="task-card-footer">
+                  <div className="task-card-buttons">
+                    <Link
+                      to={`/project/${projectId}/tasks/${task._id}/edit`}
+                      className="task-edit-button"
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      className="task-delete-button"
+                      onClick={() => handleDeleteTask(task._id)}
+                      disabled={deleteLoading}
+                    >
+                      Delete
+                    </button>
                   </div>
                 </div>
               </div>

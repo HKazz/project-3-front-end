@@ -112,22 +112,39 @@ function Projects() {
       ) : (
         <div className="projects-grid">
           {projects.map((project) => (
-            <Link
-              to={`/project/${project._id}`}
-              key={project._id}
-              className="project-card"
-            >
-              <h2 className="project-title">{project.title || project.projectName}</h2>
-              <p className="project-description">{project.description || project.projectDescription}</p>
-              <div className="project-meta">
-                <span className="project-date">
-                  Created: {new Date(project.createdAt).toLocaleDateString()}
-                </span>
-                <span className="project-tasks">
-                  Tasks: {project.tasks?.length || 0}
-                </span>
+            <div key={project._id} className="project-card">
+              <Link
+                to={`/project/${project._id}`}
+                className="project-link"
+              >
+                <h2 className="project-title">{project.title || project.projectName}</h2>
+                <p className="project-description">{project.description || project.projectDescription}</p>
+                <div className="project-meta">
+                  <span className="project-date">
+                    Created: {new Date(project.createdAt).toLocaleDateString()}
+                  </span>
+                  <span className="project-tasks">
+                    Tasks: {project.tasks?.length || 0}
+                  </span>
+                </div>
+              </Link>
+              <div className="project-actions">
+                <Link
+                  to={`/project/${project._id}`}
+                  className="view-button"
+                >
+                  View Details
+                </Link>
+                {project.projectManager?._id === localStorage.getItem('userId') && (
+                  <Link
+                    to={`/project/${project._id}?showMembers=true`}
+                    className="manage-members-button"
+                  >
+                    Manage Members
+                  </Link>
+                )}
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       )}

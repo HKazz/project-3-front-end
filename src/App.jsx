@@ -10,7 +10,11 @@ import CreateProject from './pages/CreateProject'
 import ProjectDetails from './pages/ProjectDetails'
 import EditProject from './pages/EditProject'
 import CreateTask from './pages/CreateTask'
+import EditTask from './pages/EditTask'
 import ProtectedRoute from './components/ProtectedRoute'
+import AddMember from './pages/AddMember'
+import TeamWorkDetails from './pages/TeamWorkDetails'
+import TeamMembers from './pages/TeamMembers'
 
 function App() {
   const { user } = useContext(authContext)
@@ -29,7 +33,12 @@ function App() {
             <Route path="/project/:projectId" element={<ProjectDetails />} />
             <Route path="/project/:projectId/edit" element={<EditProject />} />
             <Route path="/project/:projectId/tasks/create" element={<CreateTask />} />
+            <Route path="/project/:projectId/tasks/:taskId/edit" element={<EditTask />} />
+            <Route path="/project/:projectId/add-member" element={<AddMember />} />
+            <Route path="/project/:projectId/team" element={<TeamWorkDetails />} />
           </Route>
+
+          <Route path="/team-members" element={<TeamMembers />} />
 
           <Route path="/" element={<Navigate to="/projects" />} />
         </Routes>

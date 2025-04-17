@@ -127,11 +127,32 @@
 }
 
 .navbar-username {
-  color: #b8b8b8;
-  font-weight: 500;
-  letter-spacing: 0.3px;
+  color: #ffffff;
+  font-weight: 600;
+  letter-spacing: 0.5px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+  padding: 0.5rem 1rem;
+  background: rgba(233, 69, 96, 0.1);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(233, 69, 96, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.navbar-username .welcome-text {
+  font-size: 0.875rem;
+  color: #b8b8b8;
+  font-weight: 500;
+}
+
+.navbar-username .username-text {
+  font-size: 1.125rem;
+  color: #ffffff;
+  font-weight: 700;
+  text-transform: capitalize;
 }
 
 .navbar-username::after {
@@ -140,8 +161,8 @@
   bottom: -2px;
   left: 0;
   width: 100%;
-  height: 1px;
-  background: #e94560;
+  height: 2px;
+  background: linear-gradient(90deg, #e94560, #ff6b81);
   transform: scaleX(0);
   transform-origin: right;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -149,6 +170,10 @@
 
 .navbar-username:hover {
   color: #ffffff;
+  background: rgba(233, 69, 96, 0.15);
+  border-color: rgba(233, 69, 96, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(233, 69, 96, 0.2);
 }
 
 .navbar-username:hover::after {

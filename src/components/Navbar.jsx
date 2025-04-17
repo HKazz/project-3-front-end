@@ -33,10 +33,18 @@ function Navbar() {
           <li className="navbar-item">
             <Link to="/project/create" className="navbar-link">Create Project</Link>
           </li>
+          {user && (
+            <li className="navbar-item">
+              <Link to="/team-members" className="navbar-link">Team Members</Link>
+            </li>
+          )}
           
           {user ? (
             <div className="navbar-user">
-              <span className="navbar-username">Welcome {user.username}</span>
+              <span className="navbar-username">
+                <span className="welcome-text">Welcome,</span>
+                <span className="username-text">{user.user.username}</span>
+              </span>
               <button onClick={logout} className="navbar-button logout">Logout</button>
             </div>
           ) : (

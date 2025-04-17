@@ -7,7 +7,14 @@ import "../pages-css/EditProject.css";
 function EditProject() {
   const { projectId } = useParams();
   const navigate = useNavigate();
-  const [project, setProject] = useState(null);
+  const [project, setProject] = useState({
+    projectName: "",
+    projectDescription: "",
+    startDate: "",
+    startTime: "00:00",
+    endDate: "",
+    endTime: "23:59"
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
@@ -36,7 +43,18 @@ function EditProject() {
           headers: { Authorization: `Bearer ${token}` },
         });
         console.log("Project fetched successfully:", response.data);
-        setProject(response.data);
+        
+        // Split the datetime into date and time
+        const startDateTime = new Date(response.data.startDate);
+        const endDateTime = new Date(response.data.endDate);
+        
+        setProject({
+          ...response.data,
+          startDate: startDateTime.toISOString().split('T')[0],
+          startTime: startDateTime.toTimeString().slice(0, 5),
+          endDate: endDateTime.toISOString().split('T')[0],
+          endTime: endDateTime.toTimeString().slice(0, 5)
+        });
       } catch (error) {
         console.log("Primary endpoint error:", error.message);
         // If primary endpoint fails, try the alternative endpoint
@@ -45,7 +63,18 @@ function EditProject() {
             headers: { Authorization: `Bearer ${token}` },
           });
           console.log("Project fetched successfully from alternative endpoint:", response.data);
-          setProject(response.data);
+          
+          // Split the datetime into date and time
+          const startDateTime = new Date(response.data.startDate);
+          const endDateTime = new Date(response.data.endDate);
+          
+          setProject({
+            ...response.data,
+            startDate: startDateTime.toISOString().split('T')[0],
+            startTime: startDateTime.toTimeString().slice(0, 5),
+            endDate: endDateTime.toISOString().split('T')[0],
+            endTime: endDateTime.toTimeString().slice(0, 5)
+          });
         } else {
           throw error;
         }
@@ -82,11 +111,21 @@ function EditProject() {
       const API_URL = import.meta.env.VITE_BACKEND_URL;
       console.log("Updating project with ID:", projectId);
       
+      // Combine date and time
+      const startDateTime = `${project.startDate}T${project.startTime}`;
+      const endDateTime = `${project.endDate}T${project.endTime}`;
+      
       // Add current timestamp for updatedAt field
       const updatedProject = {
         ...project,
+        startDate: startDateTime,
+        endDate: endDateTime,
         updatedAt: new Date().toISOString()
       };
+      
+      // Remove the separate time fields before sending
+      delete updatedProject.startTime;
+      delete updatedProject.endTime;
       
       // Try the primary endpoint first
       try {
@@ -189,26 +228,46 @@ function EditProject() {
           />
         </div>
         
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="startDate">Start Date</label>
+        <div className="form-group">
+          <label htmlFor="startDate">Start Date and Time</label>
+          <div className="date-time-inputs">
             <input
               id="startDate"
               type="date"
-              value={project.startDate ? new Date(project.startDate).toISOString().split('T')[0] : ""}
+              value={project.startDate || ""}
               onChange={(e) => setProject({ ...project, startDate: e.target.value })}
               className="form-input"
+              required
+            />
+            <input
+              id="startTime"
+              type="time"
+              value={project.startTime || "00:00"}
+              onChange={(e) => setProject({ ...project, startTime: e.target.value })}
+              className="form-input"
+              required
             />
           </div>
-          
-          <div className="form-group">
-            <label htmlFor="endDate">End Date</label>
+        </div>
+        
+        <div className="form-group">
+          <label htmlFor="endDate">End Date and Time</label>
+          <div className="date-time-inputs">
             <input
               id="endDate"
               type="date"
-              value={project.endDate ? new Date(project.endDate).toISOString().split('T')[0] : ""}
+              value={project.endDate || ""}
               onChange={(e) => setProject({ ...project, endDate: e.target.value })}
               className="form-input"
+              required
+            />
+            <input
+              id="endTime"
+              type="time"
+              value={project.endTime || "23:59"}
+              onChange={(e) => setProject({ ...project, endTime: e.target.value })}
+              className="form-input"
+              required
             />
           </div>
         </div>

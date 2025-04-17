@@ -13,9 +13,11 @@ function CreateTask() {
     taskName: "",
     taskDescription: "",
     startDate: "",
+    startTime: "00:00",
     endDate: "",
+    endTime: "23:59",
     priority: "medium",
-    status: "pending"
+    status: "Not Started"
   });
   const [projects, setProjects] = useState([]);
   const [selectedProjectId, setSelectedProjectId] = useState(projectId);
@@ -77,25 +79,17 @@ function CreateTask() {
       let projectsResponse;
       
       try {
-        // Try primary endpoint
+        // Try primary endpoint for user's projects
         projectsResponse = await axios.get(
-          `${backendUrl}/projects`,
+          `${backendUrl}/api/user/projects`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
       } catch (primaryError) {
-        // Try alternative endpoint
-        try {
-          projectsResponse = await axios.get(
-            `${backendUrl}/api/projects`,
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
-        } catch (altError) {
-          // Try another alternative endpoint
-          projectsResponse = await axios.get(
-            `${backendUrl}/api/user/projects`,
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
-        }
+        // Try alternative endpoint for all projects
+        projectsResponse = await axios.get(
+          `${backendUrl}/api/projects`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
       }
 
       if (projectsResponse && projectsResponse.data) {
@@ -131,22 +125,34 @@ function CreateTask() {
   // Check if project exists
   const checkProjectExists = async (projectId, token, backendUrl) => {
     try {
+      // First try to get the project from user's projects
       const projectResponse = await axios.get(
-        `${backendUrl}/project/${projectId}`,
+        `${backendUrl}/api/user/projects`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       
-      setSelectedProjectId(projectId);
+      const foundProject = projectResponse.data.find(project => project._id === projectId);
+      if (foundProject) {
+        setSelectedProjectId(projectId);
+      } else {
+        // If not found in user's projects, check all projects
+        const allProjectsResponse = await axios.get(
+          `${backendUrl}/api/projects`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        
+        const projectInAll = allProjectsResponse.data.find(project => project._id === projectId);
+        if (projectInAll) {
+          setSelectedProjectId(projectId);
+        } else {
+          throw new Error("Project not found");
+        }
+      }
     } catch (error) {
       console.error("Project check failed:", error);
-      
-      if (error.response && error.response.status === 500) {
-        setError("Invalid project ID. Please select a valid project.");
-        // Fetch projects to allow selection
-        await fetchProjects(token, backendUrl);
-      } else {
-        setError("Project not found or you don't have access to it.");
-      }
+      setError("Project not found. Please select a valid project.");
+      // Fetch projects to allow selection
+      await fetchProjects(token, backendUrl);
     }
   };
 
@@ -207,50 +213,33 @@ function CreateTask() {
 
     try {
       const backendUrl = import.meta.env.VITE_BACKEND_URL;
-      let response;
       
-      // Try primary endpoint
-      try {
-        response = await axios.post(
-          `${backendUrl}/project/${selectedProjectId}/tasks`,
-          formData,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json"
-            }
+      // Combine date and time
+      const startDateTime = `${formData.startDate}T${formData.startTime}`;
+      const endDateTime = `${formData.endDate}T${formData.endTime}`;
+
+      const submitData = {
+        ...formData,
+        startDate: startDateTime,
+        endDate: endDateTime,
+        projectId: selectedProjectId
+      };
+
+      // Remove the separate time fields before sending
+      delete submitData.startTime;
+      delete submitData.endTime;
+
+      // Create task using the /api/tasks endpoint
+      const response = await axios.post(
+        `${backendUrl}/api/tasks`,
+        submitData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
           }
-        );
-      } catch (firstError) {
-        // Try alternative endpoint
-        try {
-          response = await axios.post(
-            `${backendUrl}/api/project/${selectedProjectId}/tasks`,
-            formData,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json"
-              }
-            }
-          );
-        } catch (altError) {
-          // Try another alternative endpoint
-          response = await axios.post(
-            `${backendUrl}/api/tasks`,
-            {
-              ...formData,
-              projectId: selectedProjectId
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json"
-              }
-            }
-          );
         }
-      }
+      );
 
       setSuccess(true);
       
@@ -259,9 +248,11 @@ function CreateTask() {
         taskName: "",
         taskDescription: "",
         startDate: "",
+        startTime: "00:00",
         endDate: "",
+        endTime: "23:59",
         priority: "medium",
-        status: "pending"
+        status: "Not Started"
       });
 
       // Redirect after a short delay
@@ -372,29 +363,51 @@ function CreateTask() {
         </div>
 
         <div className="form-group">
-          <label htmlFor="startDate">Start Date:</label>
-          <input
-            id="startDate"
-            name="startDate"
-            type="date"
-            value={formData.startDate}
-            onChange={handleChange}
-            required
-            disabled={loading || backendStatus === "unavailable"}
-          />
+          <label htmlFor="startDate">Start Date and Time:</label>
+          <div className="date-time-inputs">
+            <input
+              id="startDate"
+              name="startDate"
+              type="date"
+              value={formData.startDate}
+              onChange={handleChange}
+              required
+              disabled={loading || backendStatus === "unavailable"}
+            />
+            <input
+              id="startTime"
+              name="startTime"
+              type="time"
+              value={formData.startTime}
+              onChange={handleChange}
+              required
+              disabled={loading || backendStatus === "unavailable"}
+            />
+          </div>
         </div>
 
         <div className="form-group">
-          <label htmlFor="endDate">End Date:</label>
-          <input
-            id="endDate"
-            name="endDate"
-            type="date"
-            value={formData.endDate}
-            onChange={handleChange}
-            required
-            disabled={loading || backendStatus === "unavailable"}
-          />
+          <label htmlFor="endDate">End Date and Time:</label>
+          <div className="date-time-inputs">
+            <input
+              id="endDate"
+              name="endDate"
+              type="date"
+              value={formData.endDate}
+              onChange={handleChange}
+              required
+              disabled={loading || backendStatus === "unavailable"}
+            />
+            <input
+              id="endTime"
+              name="endTime"
+              type="time"
+              value={formData.endTime}
+              onChange={handleChange}
+              required
+              disabled={loading || backendStatus === "unavailable"}
+            />
+          </div>
         </div>
 
         <div className="form-group">
@@ -421,9 +434,9 @@ function CreateTask() {
             onChange={handleChange}
             disabled={loading || backendStatus === "unavailable"}
           >
-            <option value="pending">Pending</option>
-            <option value="in progress">In Progress</option>
-            <option value="completed">Completed</option>
+            <option value="Not Started">Not Started</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
           </select>
         </div>
 
