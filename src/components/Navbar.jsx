@@ -1,40 +1,57 @@
-import { Link } from "react-router"
-import { useContext } from "react"
+import { Link } from "react-router-dom"
+import { useContext, useState } from "react"
 import { authContext } from "../context/AuthContext"
-
+import "./Navbar.css"
 
 function Navbar() {
   const {user, logout} = useContext(authContext)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen)
+  }
 
   return (
-    <div>
-      <ul>
-        <Link to="/"><li>Homepage</li></Link>
-        <Link to="/projects"><li>Projects</li></Link>
-        <Link to="/project/create"><li>Create Project</li></Link>
-        <Link to="/project/:projectId/edit"><li>Edit Project</li></Link>
-        <Link to="/project/:projectId/delete"><li>Delete Project</li></Link>
-        <Link to="/project/:projectId/tasks/create"><li>Create Task</li></Link>
-        <Link to="/project/:projectId/tasks/:taskId/edit"><li>Edit Task</li></Link>
-        <Link to="/project/:projectId/tasks/:taskId/delete"><li>Delete Task</li></Link>
-        {user && (
-
-          <>
-          <li>Welcome {user.username}</li>
-          <button onClick={logout}>Logout</button>
-          </>
-        )}
-        {!user && (
-          <>
-          <Link to='/login'><li>Login</li></Link>
-          <Link to='/signup'><li>Signup</li></Link>
-          </>
-        )}
+    <nav className="navbar">
+      <div className="navbar-container">
+        <Link to="/projects" className="navbar-logo">
+          Task Manager
+        </Link>
         
-
-      </ul>
-    </div>
+        <button 
+          className={`navbar-toggle ${isMenuOpen ? 'active' : ''}`} 
+          onClick={toggleMenu}
+          aria-label="Toggle navigation menu"
+        >
+          <span className="navbar-toggle-icon"></span>
+        </button>
+        
+        <ul className={`navbar-menu ${isMenuOpen ? 'active' : ''}`}>
+          <li className="navbar-item">
+            <Link to="/projects" className="navbar-link">Projects</Link>
+          </li>
+          <li className="navbar-item">
+            <Link to="/project/create" className="navbar-link">Create Project</Link>
+          </li>
+          
+          {user ? (
+            <div className="navbar-user">
+              <span className="navbar-username">Welcome {user.username}</span>
+              <button onClick={logout} className="navbar-button logout">Logout</button>
+            </div>
+          ) : (
+            <>
+              <li className="navbar-item">
+                <Link to='/login' className="navbar-link">Login</Link>
+              </li>
+              <li className="navbar-item">
+                <Link to='/signup' className="navbar-link">Signup</Link>
+              </li>
+            </>
+          )}
+        </ul>
+      </div>
+    </nav>
   )
 }
 

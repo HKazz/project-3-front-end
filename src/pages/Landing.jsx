@@ -1,7 +1,9 @@
+import React from "react";
 import {useContext,useEffect, useState} from 'react'
 import { authContext } from '../context/AuthContext'
 import axios from 'axios'
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
+import "../pages-css/Landing.css";
 
 
 function LandingPage() {

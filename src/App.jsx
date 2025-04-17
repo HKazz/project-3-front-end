@@ -1,57 +1,41 @@
 import './App.css'
-import {Routes ,Route, BrowserRouter} from 'react-router'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import Login from './pages/Login'
-import LandingPage from './pages/Landing'
 import Signup from './pages/Signup'
+import Projects from './pages/Projects'
 import Navbar from './components/Navbar'
-import ValidateIsLoggedIn from './validators/ValidateIsLoggedIn'
-import ValidateIsLoggedOut from './validators/ValidateIsLoggedOut'
-import CreateProject from './pages/CreateProject'
-import EditProject from './pages/EditProject'
-import DeleteProject from './pages/DeleteProject'
-import CreateTask from './pages/CreateTask'
-import EditTask from './pages/EditTask'
-import DeleteTask from './pages/DeleteTask'
+import { useContext } from 'react'
 import { authContext } from './context/AuthContext'
-import { useContext, useEffect } from 'react'
-import ProjectList from './pages/ProjectList'
-import { useNavigate } from 'react-router'
+import CreateProject from './pages/CreateProject'
+import ProjectDetails from './pages/ProjectDetails'
+import EditProject from './pages/EditProject'
+import CreateTask from './pages/CreateTask'
+import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
-  const { user } = useContext(authContext);
-  const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   if (!user) {
-  //     navigate('/signup');
-  //   }
-  // }, [user, navigate]);
+  const { user } = useContext(authContext)
 
   return (
-    <>
-      <Navbar/>
-      <Routes>
-        {user ? (
-          <>
-        
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/projects" element={<ProjectList />} />
-            <Route path="/project/create" element={<CreateProject/>}/>
-            <Route path="/project/:projectId/edit" element={<EditProject/>}/>
-            <Route path="/project/:projectId/delete" element={<DeleteProject/>}/>
-            <Route path="/project/:projectId/tasks/create" element={<CreateTask/>}/>
-            <Route path="/project/:projectId/tasks/:taskId/edit" element={<EditTask/>}/>
-            <Route path="/project/:projectId/tasks/:taskId/delete" element={<DeleteTask/>}/>
-          </>
-        ) : (
-          <>
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-          </>
-        )}
-      </Routes>
-    </>
-  );
+    <div className="app-container">
+      <Navbar />
+      <main className="main-content">
+        <Routes>
+          <Route path="/login" element={!user ? <Login /> : <Navigate to="/projects" />} />
+          <Route path="/signup" element={!user ? <Signup /> : <Navigate to="/projects" />} />
+          
+          <Route element={<ProtectedRoute />}>
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/project/create" element={<CreateProject />} />
+            <Route path="/project/:projectId" element={<ProjectDetails />} />
+            <Route path="/project/:projectId/edit" element={<EditProject />} />
+            <Route path="/project/:projectId/tasks/create" element={<CreateTask />} />
+          </Route>
+
+          <Route path="/" element={<Navigate to="/projects" />} />
+        </Routes>
+      </main>
+    </div>
+  )
 }
 
 export default App
